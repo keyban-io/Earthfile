@@ -11,12 +11,9 @@ GET_VELERO:
 
 release:
     FROM e+alpine-user --extra_packages="wget"
+    ARG TARGETARCH
     ARG --required version
-    LET arch="amd64"
-    IF test "$(uname -m)" = "aarch64"
-        SET arch="arm64"
-    END
-    DO +GET_VELERO --version=${version} --arch=${arch} --filename=velero.tar.gz
+    DO +GET_VELERO --version=${version} --arch=${TARGETARCH} --filename=velero.tar.gz
     RUN mkdir velero
     RUN tar xf velero.tar.gz -C velero --strip-components=1
     SAVE ARTIFACT velero/velero
