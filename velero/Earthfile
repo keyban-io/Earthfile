@@ -1,0 +1,22 @@
+VERSION 0.8
+
+IMPORT github.com/Konubinix/Earthfile AS e
+
+GET_VELERO:
+    FUNCTION
+    ARG --required version
+    ARG --required arch
+    ARG --required filename
+    RUN wget --quiet -O ${filename} https://github.com/vmware-tanzu/velero/releases/download/${version}/velero-${version}-linux-${arch}.tar.gz
+
+velero:
+    FROM e+alpine-user --extra_packages="wget"
+    ARG --required version
+    LET arch="amd64"
+    IF test "$(uname -m)" = "aarch64"
+        SET arch="arm64"
+    END
+    DO +GET_VELERO --version=${version} --arch=${arch} --filename=velero.tar.gz
+    RUN mkdir velero
+    RUN tar xf velero.tar.gz -C velero --strip-components=1
+    SAVE ARTIFACT velero/velero
