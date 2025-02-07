@@ -9,7 +9,7 @@ GET_VELERO:
     ARG --required filename
     RUN wget --quiet -O ${filename} https://github.com/vmware-tanzu/velero/releases/download/${version}/velero-${version}-linux-${arch}.tar.gz
 
-velero:
+release:
     FROM e+alpine-user --extra_packages="wget"
     ARG --required version
     LET arch="amd64"
