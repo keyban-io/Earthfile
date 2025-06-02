@@ -65,8 +65,7 @@ debian:
     DO +DEBIAN_TZ_FR
     ARG extra_packages
     IF test -n "${extra_packages}"
-        RUN apt-get --quiet update > /tmp/log 2>&1 || { cat /tmp/log; exit 1; }
-        RUN apt-get --quiet install --yes ${extra_packages} > /tmp/log 2>&1 || { cat /tmp/log; exit 1; }
+        RUN { apt-get --quiet update && apt-get --quiet install --yes ${extra_packages} ; } > /tmp/log 2>&1 || { cat /tmp/log; exit 1; }
         DO +DEBIAN_APT_CLEANUP
     END
 
